@@ -13,7 +13,7 @@ public class Pilha {
 	
 	public void Push(int elemento) {
 		//Verifica se a pilha não é vazia, pois caso ela seja apenas deve substituir o -1 pelo valor que deve se empilhar
-		if(vetor[0] != -1) {	
+		if(!this.isEmpty()) {	
 			//Cria um vetor auxilar de mesmo tamanho da pilha para guardar o valores já existentes
 			int vetAux[] = new int[vetor.length];
 			for(int i = 0 ; i < vetor.length;i++) {
@@ -33,22 +33,35 @@ public class Pilha {
 	}
 	
 	public int Pop() {
-		//Cria um vetor auxilar de mesmo tamanho da pilha para guardar o valores já existentes
-		int vetAux[] = new int[vetor.length];
-		for(int i = 0 ; i < vetor.length;i++) {
-			vetAux[i] = vetor[i];
+		if(vetor.length > 1) {
+			//Cria um vetor auxilar de mesmo tamanho da pilha para guardar o valores já existentes
+			int vetAux[] = new int[vetor.length];
+			for(int i = 0 ; i < vetor.length;i++) {
+				vetAux[i] = vetor[i];
+			}
+			
+			//Diminui em 1 o tamanho da pilha
+			vetor = new int[vetor.length - 1];
+			
+			//Adiciona todos os valores depois da primeira posição da pilha anterior na pilha nova , assim excluindo o topo da pilha
+			for(int i = 0 ; i < vetor.length; i++) {
+				vetor[i] = vetAux[i + 1];
+			}
+			
+			//retorna o valor que foi desempilhado
+			return vetAux[0];
 		}
-		
-		//Diminui em 1 o tamanho da pilha
-		vetor = new int[vetor.length - 1];
-		
-		//Adiciona todos os valores depois da primeira posição da pilha anterior na pilha nova , assim excluindo o topo da pilha
-		for(int i = 0 ; i < vetor.length; i++) {
-			vetor[i] = vetAux[i + 1];
+		else {
+			vetor[0] = -1;
+			return -1;
 		}
-		
-		//retorna o valor que foi desempilhado
-		return vetAux[0];
+	}
+	
+	public boolean isEmpty() {
+		if(vetor.length == 1 && vetor[0] == -1)
+			return true;
+		else
+			return false;
 	}
 	
 	public void Print() {
