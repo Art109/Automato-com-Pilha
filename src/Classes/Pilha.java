@@ -64,10 +64,10 @@ public class Pilha {
 			return false;
 	}
 	
-	public void Print() {
+	/*public void Print() {
 		
 		for(int i = 0; i < vetor.length; i++) {
 			System.out.println(vetor[i]);
 		}
-	}
+	}*/
 }
