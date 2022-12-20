@@ -13,7 +13,7 @@ public class Transicao {
 	
 	
 	public Transicao() {
-		 transicoes = new ArrayList<Integer>();
+		transicoes = new ArrayList<Integer>();
 		loadTransicoes();
 	}
 	
@@ -30,9 +30,9 @@ public class Transicao {
           //Lê a segunda linha que define o vetor de estados finais
             String segundaLinha = arquivo.next(); 
             String vet[] = segundaLinha.split(";");
-            this.estadosFinais = new int[vet.length];
+            estadosFinais = new int[vet.length];
             for(int i = 0 ; i < vet.length; i++){
-            	this.estadosFinais[i] =  Integer.parseInt(vet[i]);
+            	this.estadosFinais[i] = Integer.parseInt(vet[i])  ;
             }
             
             ///Daqui pra baixo são transições
@@ -57,14 +57,28 @@ public class Transicao {
     
 	}
 	
-	public ArrayList<Integer> getTransicoes() {
-		return transicoes;
+	//Procura qual é o index da transição adequada para situação
+	public int procuraTransicao(int estadoAtual, int simboloLido, int pilhaLida) {
+		for(int i = 0 ; i < this.transicoes.size(); i++) {
+			if(estadoAtual == transicoes.get(i * 5)) {
+				if(simboloLido == transicoes.get((i*5) + 1 )) {
+					if(transicoes.get((i * 5)+2 ) == -1) {
+						return i;
+						
+					}
+					else if(pilhaLida == transicoes.get((i * 5) + 2 )) {
+						return i;
+					}
+					else {
+						return -1;
+					}
+						
+				}
+			}
+		}
+		return 0;
 	}
-	public int getEstadoInicial() {
-		return estadoInicial;
-	}
-	public int[] getEstadoFinais() {
-		return estadosFinais;
-	}
+
+
 
 }

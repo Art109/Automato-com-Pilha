@@ -5,10 +5,12 @@ import java.util.List;
 
 public class Automato {
     private String sentenca;
-    private MatrizTransicao matriz;
-    private int estadoInicial;
-    private List<Integer> estadosFinais;
+    //private MatrizTransicao matriz;
+    //private int estadoInicial;
+   //private List<Integer> estadosFinais;
+    private Transicao transicao;
     private Pilha pilha;
+    private int estadoAtual;
 
     public Automato() {
         this.sentenca = "";
@@ -17,14 +19,53 @@ public class Automato {
         this.estadosFinais.add(3);
         this.matriz = new MatrizTransicao();*/
         this.pilha = new Pilha();
+        transicao = new Transicao();
     }
-
+    
+    public int sizeofInt(int i) {
+		int aux = 0;
+		while(i !=0) {
+			i--;
+			aux += 1;
+			
+		}
+		return aux;
+	}
+    
+    
     public boolean verificaSentenca(String sentenca) {
         this.sentenca = sentenca;
-        //int estadoAtual = this.estadoInicial;
+        estadoAtual = transicao.estadoInicial;
 
         //Lembrar de converter sentenca!
         String nova = this.converterSentenca();
+        int index = 0;
+        for(int i = 0; i < nova.length(); i++) {
+        	index = transicao.procuraTransicao(estadoAtual, Integer.parseInt(nova.charAt(i)+""), pilha.checkTop());
+        	if(index == -1)
+        		break;
+        	estadoAtual = transicao.transicoes.get((index * 5) + 3);
+        	
+        	//Verifica se deve colocar algo na pilha se sim da um push
+        	if(transicao.transicoes.get((index *5) + 4) != -1) {
+        		//caso só tenha que adcionar um elemento na pilha
+        		if(sizeofInt(transicao.transicoes.get((index * 5) + 4)) == 1) {
+        			pilha.Push(transicao.transicoes.get((index *5) + 4));
+        		}
+        		//caso tenha que adcionar mais de um elemento na pilha
+        		else
+        			for(int j = 0; j < sizeofInt(transicao.transicoes.get((index *5) + 4)); j++) {
+        				pilha.Push((int)(Math.round(transicao.transicoes.get((index * 5) + 4) / Math.pow(10,sizeofInt(transicao.transicoes.get((index *5) + 4)) ))));
+        			}
+        	}
+        	
+        	if(transicao.transicoes.get((index * 5) + 2) != -1) {
+        		pilha.Pop();
+        	}
+        }
+   
+                 
+        
         
         /*int i = 0;
         while (i <= this.sentenca.length() - 1 && estadoAtual != -1) {
@@ -34,37 +75,15 @@ public class Automato {
             i++;
         }*/
         
-        boolean a = true;
-        for(int i = 0 ; i < nova.length(); i++) {
-        	int leitura = Integer.parseInt(nova.charAt(i) + "");
-        	
-        	if(leitura == 0 && a) {
-        		pilha.Push(0);
-        	}
-        	else if(leitura == 1) {
-        		a = false;
-        		if(!pilha.isEmpty()) {
-        			pilha.Pop();
-        		}
-        		else
-        			return false;
-        	}
-        }
+       
         
-        if(pilha.isEmpty()) {
-        	return true;
-        }
-        
-        return false;
-        /*
-        if (estadoAtual == -1) {
+        if (estadoAtual == -1 || index == -1) {
             return false;
-        } else if (isFinal(estadoAtual)) {
+        } else if (isFinal(estadoAtual) && pilha.isEmpty()) {
             return true;
         } else {
             return false;
         }
-        */
     }
     
     public String converterSentenca(){
@@ -77,7 +96,12 @@ public class Automato {
     }            
 
     private boolean isFinal(int estado) {
-        return this.estadosFinais.contains(estado);               
+        estado = estadoAtual;
+        for(int i = 0 ; i < transicao.estadosFinais.length; i++) {
+        	if(estadoAtual == transicao.estadosFinais[i])
+        		return true;
+        }
+        return false;
     }
 
     private char alfabe2Index(char m) {

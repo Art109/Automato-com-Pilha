@@ -64,6 +64,10 @@ public class Pilha {
 			return false;
 	}
 	
+	public int checkTop() {
+		return vetor[0];
+	}
+	
 	/*public void Print() {
 		
 		for(int i = 0; i < vetor.length; i++) {
