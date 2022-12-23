@@ -59,22 +59,26 @@ public class Transicao {
 	
 	//Procura qual é o index da transição adequada para situação
 	public int procuraTransicao(int estadoAtual, int simboloLido, int pilhaLida) {
-		for(int i = 0 ; i < this.transicoes.size(); i++) {
-			if(estadoAtual == transicoes.get(i * 5)) {
-				if(simboloLido == transicoes.get((i*5) + 1 )) {
-					if(transicoes.get((i * 5)+2 ) == -1) {
-						return i;
+		try {
+			for(int i = 0 ; i < this.transicoes.size(); i++) {
+				if(estadoAtual == transicoes.get(i * 5)) {
+					if(simboloLido == transicoes.get((i*5) + 1 )) {
+						if(transicoes.get((i * 5)+2 ) == -1) {
+							return i;
+							
+						}
+						else if(pilhaLida == transicoes.get((i * 5) + 2 )) {
+							return i;
+						}
 						
+							
 					}
-					else if(pilhaLida == transicoes.get((i * 5) + 2 )) {
-						return i;
-					}
-					else {
-						return -1;
-					}
-						
 				}
 			}
+		}
+		catch(Exception e) {
+			System.out.println("Verifique a entrada novamente");
+			return -1;
 		}
 		return 0;
 	}
